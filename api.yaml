@@ -1,0 +1,68 @@
+#  I don't actively use any of these normally, but they can be useful for testing purposes.
+api:
+    services:
+    - service: dfplayer_next
+      then:
+        - dfplayer.play_next:
+    - service: dfplayer_previous
+      then:
+        - dfplayer.play_previous:
+    - service: dfplayer_play
+      variables:
+        file: int
+      then:
+        - dfplayer.play: !lambda 'return file;'
+    - service: dfplayer_play_loop
+      variables:
+        file: int
+        loop_: bool
+      then:
+        - dfplayer.play:
+            file: !lambda 'return file;'
+            loop: !lambda 'return loop_;'
+    - service: dfplayer_play_folder
+      variables:
+        folder: int
+        file: int
+      then:
+        - dfplayer.play_folder:
+            folder: !lambda 'return folder;'
+            file: !lambda 'return file;'
+    - service: dfplayer_play_loop_folder
+      variables:
+        folder: int
+      then:
+        - dfplayer.play_folder:
+            folder: !lambda 'return folder;'
+            loop: True
+    - service: dfplayer_set_device_tf
+      then:
+        - dfplayer.set_device: TF_CARD
+    - service: dfplayer_set_volume
+      variables:
+        volume: int
+      then:
+        - dfplayer.set_volume: !lambda 'return volume;'
+    - service: dfplayer_set_eq
+      variables:
+        preset: int
+      then:
+        - dfplayer.set_eq: !lambda 'return static_cast<dfplayer::EqPreset>(preset);'
+    - service: dfplayer_sleep
+      then:
+        - dfplayer.sleep
+    - service: dfplayer_reset
+      then:
+        - dfplayer.reset
+    - service: dfplayer_start
+      then:
+        - dfplayer.start
+    - service: dfplayer_pause
+      then:
+        - dfplayer.pause
+    - service: dfplayer_stop
+      then:
+        - dfplayer.stop
+    - service: dfplayer_random
+      then:
+        - dfplayer.random

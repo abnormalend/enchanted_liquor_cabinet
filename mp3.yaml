@@ -1,0 +1,26 @@
+# The mp3 player module communicates over serial port, so we need to set that up and what pins to use.  
+#    Above in the logging section we make sure to say not to stream log output to this uart.
+uart:
+    id: mp3uart
+    tx_pin: GPIO1
+    rx_pin: GPIO3
+    baud_rate: 9600
+  
+# Declare DFPlayer mini module
+#  https://wiki.dfrobot.com/DFPlayer_Mini_SKU_DFR0299
+#  The DFPlayer is a teensy, super simple MP3 player that uses a microSD card for reading the MP3's.  You can control it
+#  via uart like we are doing here, or do simple triggers by attaching buttons to certain pins.  Docs at the link above.
+
+#The numbers for what track to play in the scripts below are based on the order files are placed onto the microsd.
+dfplayer:
+  id: mp3
+  uart_id: mp3uart
+
+
+# This is the mute global that the template switch above controls.  This could be replaced now that we have a volume 
+#   that can be set from HA, but works for now.
+globals:
+  - id: mute_val
+    type: bool
+    restore_value: yes
+    initial_value: '0'

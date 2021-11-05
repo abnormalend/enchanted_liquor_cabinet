@@ -1,0 +1,125 @@
+# <MTV CRIBS>...and this is where the magic happens</MTV CRIBS>
+# These scripts put it all together, play a track, set the lighting, etc.  The first scripts define lighting, stuff
+#   with sound lower down.
+script:
+    - id: lights_on
+  #This is our default light setup.  It's a warm white with a fair bit of orange to it.  Pure white looks very cold when
+  #  reflecting off all the glass. 
+      then:
+        - light.turn_on: 
+            id: side_1_top
+            transition_length: 3s
+            red: 100%
+            green: 71%
+            blue: 43%
+            brightness: 100%
+        - light.turn_on: 
+            id: side_1_main
+            transition_length: 3s
+            red: 100%
+            green: 71%
+            blue: 43%
+            brightness: 100%
+        - light.turn_on: 
+            id: side_2_top
+            transition_length: 3s
+            red: 100%
+            green: 71%
+            blue: 43%
+            brightness: 100%
+        - light.turn_on: 
+            id: side_2_main
+            transition_length: 3s
+            red: 100%
+            green: 71%
+            blue: 43%
+            brightness: 100%
+    - id: lights_on_halloween
+  #The newest show, the top lights are VERY orange, the strips are a purpleish blue, and it's all a bit dimmer than usual.
+      then:
+        - light.turn_on: 
+            id: side_1_top
+            transition_length: 3s
+            red: 100%
+            green: 50%
+            blue: 0%
+            brightness: 75%
+        - light.turn_on: 
+            id: side_1_main
+            transition_length: 3s
+            red: 50%
+            green: 0%
+            blue: 100%
+            brightness: 75%
+        - light.turn_on: 
+            id: side_2_top
+            transition_length: 3s
+            red: 100%
+            green: 50%
+            blue: 0%
+            brightness: 75%
+        - light.turn_on: 
+            id: side_2_main
+            transition_length: 3s
+            red: 50%
+            green: 0%
+            blue: 100%
+            brightness: 75%
+    - id: lights_off
+  # Turn the lights off, but do it over 3 seconds.
+      then:
+        - light.turn_off: 
+            id: side_1_top
+            transition_length: 3s
+        - light.turn_off: 
+            id: side_1_main
+            transition_length: 3s
+        - light.turn_off: 
+            id: side_2_top
+            transition_length: 3s
+        - light.turn_off: 
+            id: side_2_main
+            transition_length: 3s
+    - id: show_picker
+  # This let's is read the state of show_mode we defined above, and call the correct show based on it's value.
+  #  Adding a new show requires a few things.  Besides the script itself, an entry needs to be added to that dropdown in HA
+  #  and then the two need to be linked together in this lambda.
+      then:
+        - lambda: |-
+            if (id(show_mode).state == "default") {
+              id(default_show).execute();            
+            }
+            if (id(show_mode).state == "halloween") {
+              id(halloween).execute();      
+            }
+            if (id(show_mode).state == "tiki room") {
+              id(tiki_room).execute();      
+            }
+    - id: default_show
+  # use the default lighting above, with a random song.  The songs are Escape (the pina colada song), Brazil, or polynesian drumming.
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: !lambda |-
+                  return (rand() % 3) + 1;
+        - script.execute: lights_on
+    - id: halloween
+  # do halloween lighting above, then play the haunted mansion intro.
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: 5
+        - script.execute: lights_on_halloween
+    - id: tiki_room
+  # play the tiki room theme, with default lights for now (new lights coming soon)
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: 4
+        - script.execute: lights_on

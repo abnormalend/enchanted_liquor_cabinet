@@ -1,0 +1,50 @@
+# Set up our neopixels.  The configuration for my cabinet has a ring of pixels where the old bulb was (top in config), 
+#   plus strips running down the left, center, and middle of each cabinet (main in config).  Those strips run in parallel
+#   so they each get the same signal.  Turning on the first pixel in side 1 main is going to give you the first pixel in those
+#   three columns.  This is by no means the only way to do it, I just decided that the wiring would be simpler an couldn't 
+#   envision a use case where I really needed those 3 columns to be different colors.
+
+# our lights are all driven off a single pin, and goes from side 1 (right) to side 2 (left):  1-top, 1-main, 2-top, 2-main
+
+light:
+    - platform: neopixelbus
+      type: GRB
+      pin: 5 
+      num_leds: 116
+      name: "Neopixels"
+      id: neopixels
+      internal: true
+    - platform: partition
+      name: "Right Top"
+      id: side_1_top
+      segments:
+        - id: neopixels
+          from: 0
+          to: 15
+      # I don't want to have to define these effects for each section of the lights, so we're moving them out to an effects.yaml
+      #   that we can just include for each light.  If we get a change to effects we can just do it once.
+      effects: !include effects.yaml    
+    - platform: partition
+      name: "Left Top"
+      id: side_2_top
+      segments:
+        - id: neopixels
+          from: 58
+          to: 73
+      effects: !include effects.yaml    
+    - platform: partition
+      name: "Right Main"
+      id: side_1_main
+      segments:
+        - id: neopixels
+          from: 16
+          to: 57
+      effects: !include effects.yaml
+    - platform: partition
+      name: "Left Main"
+      id: side_2_main
+      segments:
+        - id: neopixels
+          from: 74
+          to: 115
+      effects: !include effects.yaml

@@ -1,0 +1,69 @@
+# Each cabinet door has a magnetic switch hidden behind it, but they are wired in pairs.  The 2 doors on the 
+#  left cabinet are in series, and the 2 doors for the right cabinet are in series.  Opening either door triggers
+#  the binary sensor for that side.  Opening the door kicks off the show_picker script, we'll talk about that below.
+#  the on_release segment turns the lights back off 10 minutes after the doors were closed.
+binary_sensor:
+    - platform: gpio
+      pin:
+        number: 15
+        mode: INPUT_PULLUP
+      name: "Right Doors"
+      device_class: door
+      on_press:
+        then:
+          - script.execute: show_picker
+      on_release:
+        then:
+          - delay: 600s
+          - script.execute: lights_off
+    - platform: gpio
+      pin:
+        number: 4
+        mode: INPUT_PULLUP
+      name: "Left Doors"
+      device_class: door
+      on_press:
+        then:
+          - script.execute: show_picker
+      on_release:
+        then:
+          - delay: 600s
+          - script.execute: lights_off
+  
+# This was added to give us an option to turn off the sound, since maybe you don't want your cabinet blaring
+#    "If you like Pina Colada's" at midnight when you open the door.  Appears as a simple toggle in HA.
+switch:
+  - platform: template
+    name: "Mute"
+    id: mute
+    lambda: !lambda |-
+      return id(mute_val);
+    turn_on_action:
+      - globals.set:
+          id: mute_val
+          value: '1'
+    turn_off_action:
+      - globals.set:
+          id: mute_val
+          value: '0'
+  
+# show_mode lets us dynamically select what script to run based on a dropdown in HA.
+# volume lets us control the volume of the mp3 player from a slider in HA.
+text_sensor:
+  - platform: homeassistant
+    name: 'show_mode'
+    id: show_mode
+    entity_id: input_select.liquorcabinet_mode
+  - platform: homeassistant
+    name: volume
+    entity_id: input_number.liqourcabinet_volume
+    filters:
+      - lambda: return x.substr(0, x.size()-2);
+    on_value:
+      then:
+        - dfplayer.set_volume: !lambda |-
+            char *end;
+            float value = ::strtof(x.c_str(), &end);
+            if (end == nullptr || end != x.end().base())
+              return {};
+            return value;
