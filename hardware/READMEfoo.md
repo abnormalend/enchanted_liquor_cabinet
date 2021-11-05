@@ -2,4 +2,7 @@
 
 ## BOM
 
+lights
+printed parts
+dfplayer
 working on it....
