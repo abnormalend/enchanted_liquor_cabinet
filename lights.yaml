@@ -16,7 +16,7 @@ light:
       internal: true
     - platform: partition
       name: "Right Top"
-      id: side_1_top
+      id: right_top
       segments:
         - id: neopixels
           from: 0
@@ -26,7 +26,7 @@ light:
       effects: !include effects.yaml    
     - platform: partition
       name: "Left Top"
-      id: side_2_top
+      id: left_top
       segments:
         - id: neopixels
           from: 58
@@ -34,7 +34,7 @@ light:
       effects: !include effects.yaml    
     - platform: partition
       name: "Right Main"
-      id: side_1_main
+      id: right_main
       segments:
         - id: neopixels
           from: 16
@@ -42,7 +42,7 @@ light:
       effects: !include effects.yaml
     - platform: partition
       name: "Left Main"
-      id: side_2_main
+      id: left_main
       segments:
         - id: neopixels
           from: 74

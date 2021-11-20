@@ -7,28 +7,28 @@ script:
   #  reflecting off all the glass. 
       then:
         - light.turn_on: 
-            id: side_1_top
+            id: right_top
             transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
         - light.turn_on: 
-            id: side_1_main
+            id: right_main
             transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
         - light.turn_on: 
-            id: side_2_top
+            id: left_top
             transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
         - light.turn_on: 
-            id: side_2_main
+            id: left_main
             transition_length: 3s
             red: 100%
             green: 71%
@@ -38,28 +38,28 @@ script:
   #The newest show, the top lights are VERY orange, the strips are a purpleish blue, and it's all a bit dimmer than usual.
       then:
         - light.turn_on: 
-            id: side_1_top
+            id: right_top
             transition_length: 3s
             red: 100%
             green: 50%
             blue: 0%
             brightness: 75%
         - light.turn_on: 
-            id: side_1_main
+            id: right_main
             transition_length: 3s
             red: 50%
             green: 0%
             blue: 100%
             brightness: 75%
         - light.turn_on: 
-            id: side_2_top
+            id: left_top
             transition_length: 3s
             red: 100%
             green: 50%
             blue: 0%
             brightness: 75%
         - light.turn_on: 
-            id: side_2_main
+            id: left_main
             transition_length: 3s
             red: 50%
             green: 0%
@@ -69,16 +69,16 @@ script:
   # Turn the lights off, but do it over 3 seconds.
       then:
         - light.turn_off: 
-            id: side_1_top
+            id: right_top
             transition_length: 3s
         - light.turn_off: 
-            id: side_1_main
+            id: right_main
             transition_length: 3s
         - light.turn_off: 
-            id: side_2_top
+            id: left_top
             transition_length: 3s
         - light.turn_off: 
-            id: side_2_main
+            id: left_main
             transition_length: 3s
     - id: show_picker
   # This let's is read the state of show_mode we defined above, and call the correct show based on it's value.
@@ -98,13 +98,13 @@ script:
     - id: default_show
   # use the default lighting above, with a random song.  The songs are Escape (the pina colada song), Brazil, or polynesian drumming.
       then:
+        - script.execute: lights_on
         - if:
             condition:
               switch.is_off: mute
             then:
               - dfplayer.play: !lambda |-
                   return (rand() % 3) + 1;
-        - script.execute: lights_on
     - id: halloween
   # do halloween lighting above, then play the haunted mansion intro.
       then:
