@@ -3,3 +3,61 @@
 - addressable_twinkle:
 - addressable_rainbow:
 - addressable_fireworks:
+- addressable_color_wipe:
+    name: irish_wipe
+    colors:
+      - red: 0%
+        green: 100%
+        blue: 0%
+        num_leds: 14
+      - red: 100%
+        green: 100%
+        blue: 100%
+        num_leds: 14
+      - red: 100%
+        green: 50%
+        blue: 0%
+        num_leds: 14
+    add_led_interval: 100ms
+    reverse: false
+- addressable_color_wipe:
+    name: zombo_wipe
+    colors:
+      - red: 100%
+        green: 0%
+        blue: 0%
+        num_leds: 5
+      - red: 100%
+        green: 60%
+        blue: 0%
+        num_leds: 5
+      - red: 0%
+        green: 0%
+        blue: 100%
+        num_leds: 5
+      - red: 60%
+        green: 0%
+        blue: 100%
+        num_leds: 5
+      - red: 0%
+        green: 100%
+        blue: 100%
+        num_leds: 5
+      - red: 20%
+        green: 40%
+        blue: 100%
+        num_leds: 5
+      - red: 100%
+        green: 60%
+        blue: 0%
+        num_leds: 5
+      - red: 0%
+        green: 100%
+        blue: 0%
+        num_leds: 5
+      - red: 00%
+        green: 00%
+        blue: 100%
+        num_leds: 5
+    add_led_interval: 75ms
+    reverse: true
