@@ -1,6 +1,9 @@
 #  I don't actively use any of these normally, but they can be useful for testing purposes.
 api:
     services:
+    - service: play_show
+      then:
+        - script.execute: show_picker
     - service: dfplayer_next
       then:
         - dfplayer.play_next:
