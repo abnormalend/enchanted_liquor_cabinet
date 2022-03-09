@@ -9,6 +9,7 @@
 light:
     - platform: neopixelbus
       type: GRB
+      variant: 800KBPS
       pin: 5 
       num_leds: 116
       name: "Neopixels"
