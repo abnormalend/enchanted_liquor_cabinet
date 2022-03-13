@@ -8,63 +8,112 @@ script:
       then:
         - light.turn_on: 
             id: right_top
-            transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
+            effect: "None"
         - light.turn_on: 
             id: right_main
-            transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
+            effect: "None"
         - light.turn_on: 
             id: left_top
-            transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
+            effect: "None"
         - light.turn_on: 
             id: left_main
-            transition_length: 3s
             red: 100%
             green: 71%
             blue: 43%
             brightness: 100%
+            effect: "None"
+  #The top lights are VERY orange, the strips are a purpleish blue, and it's all a bit dimmer than usual.
     - id: lights_on_halloween
-  #The newest show, the top lights are VERY orange, the strips are a purpleish blue, and it's all a bit dimmer than usual.
       then:
+        - logger.log: Turning on lights
         - light.turn_on: 
             id: right_top
-            transition_length: 3s
+            # transition_length: 3s
             red: 100%
             green: 50%
             blue: 0%
             brightness: 75%
+            effect: flicker
         - light.turn_on: 
             id: right_main
-            transition_length: 3s
+            # transition_length: 3s
             red: 50%
             green: 0%
             blue: 100%
             brightness: 75%
         - light.turn_on: 
             id: left_top
-            transition_length: 3s
+            # transition_length: 3s
             red: 100%
             green: 50%
             blue: 0%
             brightness: 75%
+            effect: flicker
         - light.turn_on: 
             id: left_main
-            transition_length: 3s
+            # transition_length: 3s
             red: 50%
             green: 0%
             blue: 100%
             brightness: 75%
+    - id: lights_on_st_pats_1
+    #The newest show, 
+      then:
+        - logger.log: Turning on lights
+        - light.turn_on: 
+            id: right_top
+            brightness: 100%
+            effect: irish_wipe
+        - light.turn_on: 
+            id: left_top
+            brightness: 100%
+            effect: irish_wipe
+        - light.turn_on: 
+            id: right_main
+            brightness: 100%
+            effect: irish_wipe
+        - light.turn_on: 
+            id: left_main
+            brightness: 100%
+            effect: irish_wipe
+    - id: lights_on_zombo
+    #The newest show, 
+      then:
+        - logger.log: Turning on lights
+        - light.turn_on: 
+            id: right_top
+            brightness: 100%
+            effect: zombo_wipe
+        - light.turn_on: 
+            id: right_main
+            brightness: 100%
+            effect: zombo_wipe
+        - light.turn_on: 
+            id: left_top
+            brightness: 100%
+            effect: zombo_wipe
+        - light.turn_on: 
+            id: left_main
+            brightness: 100%
+            effect: zombo_wipe
+    - id: lights_on_synthwave
+      then:
+        - light.turn_on:
+            id: right_main
+            effect: synthwave
+            brightness: 100%
     - id: lights_off
   # Turn the lights off, but do it over 3 seconds.
       then:
@@ -89,37 +138,119 @@ script:
             if (id(show_mode).state == "default") {
               id(default_show).execute();            
             }
+            if (id(show_mode).state == "pina colada") {
+              id(pina_colada).execute();            
+            }
+            if (id(show_mode).state == "brazil") {
+              id(brazil).execute();            
+            }
+            if (id(show_mode).state == "drums") {
+              id(drums).execute();            
+            }
             if (id(show_mode).state == "halloween") {
               id(halloween).execute();      
             }
             if (id(show_mode).state == "tiki room") {
               id(tiki_room).execute();      
             }
+            if (id(show_mode).state == "st pats 1") {
+              id(st_pats_1).execute();      
+            }
+            if (id(show_mode).state == "st pats 2") {
+              id(st_pats_2).execute();      
+            }
+            if (id(show_mode).state == "zombo") {
+              id(zombo).execute();      
+            }
+            if (id(show_mode).state == "synthwave") {
+              id(synthwave).execute();      
+            }
     - id: default_show
   # use the default lighting above, with a random song.  The songs are Escape (the pina colada song), Brazil, or polynesian drumming.
       then:
+        - logger.log: "Running default script"
+        - script.execute: lights_on
+    - id: random_show
+  # use the default lighting above, with a random song.  The songs are Escape (the pina colada song), Brazil, or polynesian drumming.
+      then:
+        - logger.log: "Running default script"
         - script.execute: lights_on
         - if:
             condition:
               switch.is_off: mute
             then:
+              - logger.log: "Playing random Mp3 track"
               - dfplayer.play: !lambda |-
                   return (rand() % 3) + 1;
-    - id: halloween
-  # do halloween lighting above, then play the haunted mansion intro.
+    - id: pina_colada
       then:
         - if:
             condition:
               switch.is_off: mute
             then:
-              - dfplayer.play: 5
-        - script.execute: lights_on_halloween
-    - id: tiki_room
-  # play the tiki room theme, with default lights for now (new lights coming soon)
-      then:
-        - if:
-            condition:
-              switch.is_off: mute
-            then:
-              - dfplayer.play: 4
+              - dfplayer.play: ${pina_colada}
         - script.execute: lights_on
+    - id: brazil
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${brazil}
+        - script.execute: lights_on
+    - id: drums
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${drums}
+        - script.execute: lights_on
+# play the tiki room theme, with default lights for now (new lights coming soon)
+    - id: tiki_room
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${tiki_room}
+        - script.execute: lights_on
+# do halloween lighting above, then play the haunted mansion intro.
+    - id: halloween
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${haunted_mansion}
+        - script.execute: lights_on_halloween
+# Description TBD
+    - id: st_pats_1
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${shipping_up_boston}
+        - script.execute: lights_on_st_pats_1
+    - id: st_pats_2
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${drunken_lulaby}
+        - script.execute: lights_on_st_pats_1
+        # Description TBD
+    - id: zombo
+      then:
+        - if:
+            condition:
+              switch.is_off: mute
+            then:
+              - dfplayer.play: ${zombo}
+        - script.execute: lights_on_zombo
+      # Description TBD
+    - id: synthwave
+      then:
+        - script.execute: lights_on_synthwave

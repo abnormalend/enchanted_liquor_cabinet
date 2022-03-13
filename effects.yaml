@@ -61,3 +61,26 @@
         num_leds: 5
     add_led_interval: 75ms
     reverse: true
+- addressable_lambda:
+    name: synthwave
+    update_interval: 100ms
+    lambda: |-
+      // it.size() - Number of LEDs
+      // it[num] - Access the LED at index num.
+      // Set the LED at num to the given r, g, b values
+      // it[num] = Color(r, g, b);
+      // Get the color at index num (Color instance)
+      // it[num].get();
+
+      static uint16_t red_start = 255;
+      static uint16_t blue_start = 128;
+      static uint16_t step_size = 128 / it.size();
+      static uint16_t line_spacing =10;
+      // Fade
+      for (int i = it.size() - 1; i > 0; i--) {
+        if (i % line_spacing == 0) {
+          it[i] = Color::WHITE;
+        } else {
+          it[i] = Color(red_start - (i * step_size), 0 , blue_start + (i * step_size));
+        }
+      }
